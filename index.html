@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Black Jack</title>
+</head>
+<style>
+    body {
+        background-color:rgb(25, 100, 50);
+        margin: 0px;
+    }
+    h1 {
+        color: white;
+        background-color: black;
+        text-align: center;
+        padding: 1%;
+        margin: 0px;
+    }
+    .botones {
+        text-align: center;
+        padding: 2%;
+        margin-left: 10%;
+        margin-right: 10%;
+    }
+    button {
+        font-size: x-large;
+        color: white;
+        width: 200px;
+        height: 50px;
+        background-color:green;
+        border: 2px solid white;
+        border-radius: 10px;
+    }
+    h2 {
+        margin-left: 25px;
+    }
+    h2,p {
+        display: inline;
+        color: white;
+    }
+    img {
+        width: 150px;
+        height: 229.23px;
+        margin-left: -50px;;
+    }
+    #CartasJugador, #CartasCrupier {
+        margin-left: 100px;
+        margin-top: 20px;
+    }
+    .jugador, .crupier {
+        margin-top: 20px;
+    }
+    h3 {
+        text-align: center;
+        font-size: xx-large;
+        color: white;
+    }
+    #Ganadas {
+        color: greenyellow;
+    }
+    #Perdidas {
+        color: red;
+    }
+    .Contador {
+        text-align: center;
+    }
+</style>
+<script>
+    var mazo = [["A1",11],["A2",2],["A3",3],["A4",4],["A5",5],["A6",6],["A7",7],["A8",8],["A9",9],["A10",10],["AJ",10],["AQ",10],["AK",10],["B1",11],["B2",2],["B3",3],["B4",4],["B5",5],["B6",6],["B7",7],["B8",8],["B9",9],["B10",10],["BJ",10],["BQ",10],["BK",10],["C1",11],["C2",2],["C3",3],["C4",4],["C5",5],["C6",6],["C7",7],["C8",8],["C9",9],["C10",10],["CJ",10],["CQ",10],["CK",10],["D1",11],["D2",2],["D3",3],["D4",4],["D5",5],["D6",6],["D7",7],["D8",8],["D9",9],["D10",10],["DJ",10],["DQ",10],["DK",10]];
+    mazo.sort(function(a, b){return 0.5 - Math.random()});
+    var PuntosTotalesJugador = 0;
+    var CartaHTMLJugador = "";
+    var PuntosTotalesCrupier = 0;
+    var CartaHTMLCrupier = "";
+    var Ganadas = 0;
+    var Perdidas = 0;
+    var Ganador = "-";
+
+    function PedirCarta() {
+        if (PuntosTotalesJugador < 21) {
+            var CartaJugador = mazo.pop();
+            var CartaNuevaJugador = CartaJugador[0];
+            var PuntoActualJugador = CartaJugador[1];
+            PuntosTotalesJugador = PuntoActualJugador + PuntosTotalesJugador;
+            CartaHTMLJugador = CartaHTMLJugador +"<img src=\"Cartas/"+CartaNuevaJugador+".png\" >";
+            document.getElementById("CartasJugador").innerHTML = CartaHTMLJugador;
+            document.getElementById("PuntosJugador").innerHTML = "<p>"+PuntosTotalesJugador+"</p>";
+            if (PuntosTotalesJugador > 21) {
+                Perdidas++;
+                Ganador = "Perdiste...";
+                Resultado();
+            }
+        }
+        else {
+            NuevoJuego();
+        }
+    }
+    function Detener() {
+        while (PuntosTotalesCrupier < 17) {
+            var CartaCrupier = mazo.pop();
+            var CartaNuevaCrupier = CartaCrupier[0];
+            var PuntoActualCrupier = CartaCrupier[1];
+            var NumeroEnElMazoCrupier = mazo.length+1;
+            PuntosTotalesCrupier = PuntoActualCrupier + PuntosTotalesCrupier;
+            CartaHTMLCrupier = CartaHTMLCrupier +"<img src=\"Cartas/"+CartaNuevaCrupier+".png\" >";
+            document.getElementById("CartasCrupier").innerHTML = CartaHTMLCrupier;
+            document.getElementById("PuntosCrupier").innerHTML = "<p>"+PuntosTotalesCrupier+"</p>";
+        }
+        if (PuntosTotalesCrupier > 21) {
+            Ganadas++;
+            Ganador = "Ganaste...";
+            Resultado();
+        }
+        else {
+            Comparar();
+        }
+    }
+    function NuevaPartida() {
+        mazo = [["A1",11],["A2",2],["A3",3],["A4",4],["A5",5],["A6",6],["A7",7],["A8",8],["A9",9],["A10",10],["AJ",10],["AQ",10],["AK",10],["B1",11],["B2",2],["B3",3],["B4",4],["B5",5],["B6",6],["B7",7],["B8",8],["B9",9],["B10",10],["BJ",10],["BQ",10],["BK",10],["C1",11],["C2",2],["C3",3],["C4",4],["C5",5],["C6",6],["C7",7],["C8",8],["C9",9],["C10",10],["CJ",10],["CQ",10],["CK",10],["D1",11],["D2",2],["D3",3],["D4",4],["D5",5],["D6",6],["D7",7],["D8",8],["D9",9],["D10",10],["DJ",10],["DQ",10],["DK",10]];
+        mazo.sort(function(a, b){return 0.5 - Math.random()});
+        PuntosTotalesJugador = 0;
+        CartaHTMLJugador = "";
+        PuntosTotalesCrupier = 0;
+        CartaHTMLCrupier = "";
+        document.getElementById("CartasJugador").innerHTML = "<img src=\"Cartas/red_back.png\">";
+        document.getElementById("PuntosJugador").innerHTML = "";
+        document.getElementById("CartasCrupier").innerHTML = "<img src=\"Cartas/grey_back.png\">";
+        document.getElementById("PuntosCrupier").innerHTML = "";
+        document.getElementById("Resultado").innerHTML = "-";
+    }
+    function Comparar() {
+        Ganador = PuntosTotalesJugador > PuntosTotalesCrupier ? "¡Ganaste!" : "¡Perdiste!";
+        if (Ganador === "¡Ganaste!") {
+            Ganadas++;
+            Resultado();
+        }
+        else if (PuntosTotalesCrupier === PuntosTotalesJugador) {
+            document.getElementById("Resultado").innerHTML = "¡Empate!";
+        }
+        else {
+            Perdidas++;
+            Resultado();
+        }
+    }
+    function Resultado() {
+        document.getElementById("Ganadas").innerHTML = Ganadas;
+        document.getElementById("Perdidas").innerHTML = Perdidas;
+        document.getElementById("Resultado").innerHTML = Ganador;
+    }
+</script>
+<body>
+    <h1>Black Jack</h1>
+    <div class="botones">
+        <button onclick="NuevaPartida()">Nueva partida</button>
+        <button onclick="PedirCarta()">Pedir carta</button>
+        <button onclick="Detener()">Detener</button>
+    </div>
+    <h3 id="Resultado">-</h3>
+    <div class="jugador">
+        <h2>Jugador - Puntos:</h2>
+        <p id="PuntosJugador">0</p>
+    </div>
+    <div id="CartasJugador">
+        <img src="Cartas\red_back.png">
+    </div>
+    <div class="crupier">
+        <h2>Crupier - Puntos:</h2>
+        <p id="PuntosCrupier">0</p>
+    </div>
+    <div id="CartasCrupier">
+        <img src="Cartas\grey_back.png">
+    </div>
+    <div class="Contador">
+        <p>Contador:</p>
+        <p id="Ganadas">Ganadas</p>
+        <p id="Perdidas">Perdidas</p>
+    </div>
+</body>
+</html>
